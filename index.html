@@ -166,11 +166,66 @@ button,select,input,.node{touch-action:manipulation;-webkit-tap-highlight-color:
   .tbl td:last-child::before{content:"Held by  ";font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 }
 @media (max-width:380px){.guide{grid-template-columns:1fr}}
+
+
+/* ---- Spoiler shield ---- */
+.spbtn{display:inline-flex;align-items:center;gap:7px;font:inherit;font-size:.85rem;font-weight:500;color:var(--fg);background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:6px 12px;min-height:36px;cursor:pointer;align-self:center}
+.spbtn:hover{border-color:var(--accent)}
+.spbtn svg{width:17px;height:17px;flex-shrink:0}
+.sp-hidden{filter:blur(6px);cursor:pointer;user-select:none;-webkit-user-select:none;transition:filter .2s}
+.sp-hidden *{pointer-events:none}
+.sp-strip{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:.88rem;color:var(--muted);border:1px dashed var(--line);border-radius:var(--r);padding:9px 12px;background:var(--surface)}
+.sp-strip b{color:var(--fg);font-weight:500}
+.sp-note{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-bottom:12px;padding:12px 14px;border:1px solid var(--line);border-left:3px solid var(--bad);border-radius:var(--r);background:var(--surface);font-size:.93rem}
+.sp-note .chip{min-height:40px}
+main .wrap.sp-wrap{padding-bottom:0}
+main .wrap.sp-wrap + .wrap{padding-top:14px}
+dialog.spd{border:1px solid var(--line);border-radius:12px;padding:0;max-width:460px;width:calc(100% - 32px);background:var(--surface);color:var(--fg);box-shadow:0 30px 80px rgba(0,0,0,.4)}
+dialog.spd::backdrop{background:rgba(10,14,20,.6)}
+.spd .in{padding:22px 22px 18px}
+.spd h2{margin:6px 0 8px}
+.spd p{margin:0 0 16px;color:var(--muted);font-size:.95rem}
+.spd .opts{display:grid;gap:8px}
+.spd .opts button{text-align:left;font:inherit;cursor:pointer;background:var(--bg);color:var(--fg);border:1.5px solid var(--line);border-radius:var(--r);padding:11px 14px}
+.spd .opts button:hover,.spd .opts button.cur{border-color:var(--accent)}
+.spd .opts b{display:block;font-weight:700}
+.spd .opts span{display:block;font-size:.85rem;color:var(--muted)}
+.spd .fine{margin:12px 0 0;font-size:.8rem}
+@media (max-width:700px){.spbtn span{display:none}.spbtn{padding:6px 9px}}
+/* ---- The Reader's Atlas extras ---- */
+.atlas{margin-left:auto;display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:5px 11px;align-self:center}
+.atlas:hover{color:var(--fg);border-color:var(--accent)}
+.atlas svg{width:16px;height:15px;flex-shrink:0}
+.atlas path{fill:var(--bronze)}
+.atlas .moon-book{fill:var(--surface)}
+footer.site{border-top:1px solid var(--line);background:var(--surface);margin-top:10px}
+footer.site .wrap{padding-block:26px 34px;display:grid;gap:14px}
+footer.site h2{font-size:1.35rem}
+.buyrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.buy{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--r);background:var(--bg);color:var(--fg);text-decoration:none;min-height:44px}
+.buy:hover{border-color:var(--accent)}
+.buy b{font-family:var(--display);font-weight:400;font-size:1.1rem}
+.buy span{font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.foot-actions{display:flex;flex-wrap:wrap;gap:10px}
+.kofi,.home{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 16px;border-radius:var(--r);font-weight:500;text-decoration:none}
+.kofi{background:var(--accent);color:var(--accent-ink)}
+.kofi:hover{filter:brightness(1.1)}
+.home{border:1px solid var(--line);color:var(--fg)}
+.home:hover{border-color:var(--accent)}
+.kofi svg,.home svg{width:18px;height:18px;flex-shrink:0}
+.fine{margin:0;color:var(--muted);font-size:.86rem;max-width:80ch}
+.fine a{color:var(--accent)}
+@media (max-width:700px){
+  .atlas span{display:none}
+  .atlas{padding:5px 8px}
+  footer.site .wrap{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+  main .wrap{padding-bottom:24px}
+}
 </style>
 
 <header class="bar">
   <div class="wrap">
-    <div class="brand"><h1>Empyrean Codex</h1><small>Fourth Wing · Iron Flame · Onyx Storm · Threshing Day</small></div>
+    <div class="brand"><h1>Empyrean Codex</h1><small>Fourth Wing · Iron Flame · Onyx Storm · Threshing Day</small><a class="atlas" href="https://readersatlas.com" aria-label="The Reader's Atlas: more character guides"><svg viewBox="0 0 140 130" aria-hidden="true"><path d="M28 60 A46 46 0 1 0 112 60 A38 38 0 1 1 28 60 Z"/><path class="moon-book" d="M36 74 C48 68 60 69 70 76 C80 69 92 68 104 74 L104 100 C92 94 80 95 70 102 C60 95 48 94 36 100 Z"/><path d="M70 4 L75 15 L86 20 L75 25 L70 36 L65 25 L54 20 L65 15 Z"/></svg><span>The Reader's Atlas</span></a><button class="spbtn" id="sp-open" type="button" aria-haspopup="dialog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/><path d="M4 4l16 16"/></svg><span>Spoilers</span></button></div>
     <div class="gsearch">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
       <input id="gq" type="search" placeholder="Search everything: riders, dragons, signets, laws…" autocomplete="off" aria-label="Search everything">
@@ -180,7 +235,43 @@ button,select,input,.node{touch-action:manipulation;-webkit-tap-highlight-color:
   </div>
 </header>
 
-<main><div class="wrap" id="view"></div></main>
+<main><div class="wrap sp-wrap"><div class="sp-strip" id="sp-strip"></div></div><div class="wrap" id="view"></div></main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">The Empyrean series</p>
+      <h2>Read the books</h2>
+    </div>
+    <div class="buyrow">
+      <a class="buy" data-buy="Fourth Wing"><b>Fourth Wing</b><span>Book 1 · Find it</span></a>
+      <a class="buy" data-buy="Iron Flame"><b>Iron Flame</b><span>Book 2 · Find it</span></a>
+      <a class="buy" data-buy="Onyx Storm"><b>Onyx Storm</b><span>Book 3 · Find it</span></a>
+      <a class="buy" data-buy="Threshing Day"><b>Threshing Day</b><span>Wing &amp; Claw · Find it</span></a>
+    </div>
+    <div class="foot-actions">
+      <a class="kofi" href="https://ko-fi.com/readersatlas" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8z"/><path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8 4v1.5M11.5 3v2.5"/></svg>Buy me a coffee</a>
+      <a class="home" href="https://readersatlas.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>More guides at The Reader's Atlas</a>
+    </div>
+    <p class="fine">Unofficial, fan-made reference. Not affiliated with Rebecca Yarros, Entangled Publishing or Red Tower Books; all characters and worlds belong to their creators.</p>
+    <p class="fine">Some book links may be affiliate links, which means I may earn a small commission at no extra cost to you.</p>
+    <p class="fine">Part of <a href="https://readersatlas.com">The Reader's Atlas</a> · <a href="https://www.instagram.com/readers.atlas" target="_blank" rel="noopener">@readers.atlas</a></p>
+  </div>
+<dialog class="spd" id="spd" aria-labelledby="spd-t">
+  <div class="in">
+    <p class="eyebrow" style="margin:0">Spoiler warning</p>
+    <h2 id="spd-t">How far have you read?</h2>
+    <p>This codex covers every book, and the series is full of twists. I'll blur anything you haven't reached yet. Tap a blurred item to peek, or change this any time with the eye button at the top.</p>
+    <div class="opts" id="spd-opts">
+      <button type="button" data-lv="0"><b>I'm reading Fourth Wing</b><span>Hide twists, deaths and everything after</span></button>
+      <button type="button" data-lv="1"><b>I've finished Fourth Wing</b><span>Hide Iron Flame and later</span></button>
+      <button type="button" data-lv="2"><b>I've finished Iron Flame</b><span>Hide Onyx Storm and later</span></button>
+      <button type="button" data-lv="3"><b>I've finished Onyx Storm, or don't mind spoilers</b><span>Show everything, including Threshing Day</span></button>
+    </div>
+    <p class="fine">Your choice is remembered on this device.</p>
+  </div>
+</dialog>
+</footer>
 
 <script>
 /* ============ DATA ============ */
@@ -408,6 +499,41 @@ const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e)
 function charLink(id){return C[id]?`<button class="lnk" data-go="char:${id}">${esc(C[id].name)}</button>`:esc(nm(id))}
 function dragonLink(id){return D[id]?`<button class="lnk" data-go="dragon:${id}">${esc(D[id].name)}</button>`:esc(id)}
 
+/* ============ SPOILER SHIELD ============
+   Reading level: 0 reading Fourth Wing · 1 reading Iron Flame · 2 reading Onyx Storm · 3 show everything.
+   Characters, dragons and rules from books not started are blurred. Twist-prone details
+   (deaths, alignment, signets, bonds, agendas…) stay blurred until the book they come from is finished.
+   A detail that names a later book (e.g. "dies during Onyx Storm") is held back until that book is finished. */
+const BIDX={FW:0,IF:1,OS:2,TD:3};
+const BMENT=[[/Fourth Wing|\bFW\b/,0],[/Iron Flame|\bIF\b/,1],[/Onyx Storm|\bOS\b/,2],[/Threshing Day|\bTD\b/,3]];
+let spLevel=store.get("spoilerLevel",null);
+const SPK=new Set();
+const PL=()=>spLevel===null?0:spLevel;
+const ALL=()=>PL()>=3;
+const firstBook=b=>{const xs=String(b||"FW").split(" ").map(x=>BIDX[x]).filter(x=>x!==undefined);return xs.length?Math.min(...xs):0};
+const mention=t=>{let m=-1;const s=String(t||"");BMENT.forEach(([re,i])=>{if(i>m&&re.test(s))m=i});return m};
+const later=t=>{const s=String(t||"").replace(/Fourth Wing/g,"");return mention(s)};
+const hideItem=f=>!ALL()&&f>PL();
+// A dragon whose true kind or tail changes (e.g. Andarna) is an Onyx Storm reveal
+const kindR=d=>d&&(d.color==="irid"||/→/.test(d.tail||""))?2:-1;
+const hideField=r=>!ALL()&&r>=PL();
+function sp(hide,key,html,tag){if(!hide||SPK.has(key))return html;tag=tag||"span";return `<${tag} class="sp-hidden" data-spk="${key}" title="Spoiler: tap to reveal">${html}</${tag}>`}
+const LVLAB=["Reading Fourth Wing","Finished Fourth Wing","Finished Iron Flame","Showing everything"];
+function spStrip(){$("#sp-strip").innerHTML=ALL()?`<span>Spoilers: <b>${LVLAB[3]}</b></span><button class="lnk" data-open-sp>Change</button>`:`<span>Spoilers: <b>${LVLAB[PL()]}</b>. Blurred items are from books you haven't finished. Tap one to peek.</span><button class="lnk" data-open-sp>Change</button>`;
+ document.querySelectorAll("#spd-opts [data-lv]").forEach(b=>b.classList.toggle("cur",+b.dataset.lv===PL()))}
+document.addEventListener("click",e=>{const el=e.target.closest(".sp-hidden");if(!el)return;e.preventDefault();e.stopPropagation();
+ const k=el.dataset.spk;SPK.add(k);el.classList.remove("sp-hidden");el.querySelectorAll(".sp-hidden").forEach(c=>{SPK.add(c.dataset.spk);c.classList.remove("sp-hidden")});
+ document.querySelectorAll(`[data-sp-for="${k}"]`).forEach(n=>n.remove())},true);
+document.addEventListener("click",e=>{const r=e.target.closest("[data-reveal]");if(!r)return;const t=document.querySelector(`[data-spk="${r.dataset.reveal}"]`);if(t)t.click()});
+const spd=document.getElementById("spd");
+function openSp(){if(typeof spd.showModal==="function")spd.showModal();else spd.setAttribute("open","")}
+function closeSp(){if(spd.open){typeof spd.close==="function"?spd.close():spd.removeAttribute("open")}}
+document.addEventListener("click",e=>{if(e.target.closest("#sp-open,[data-open-sp]"))openSp()});
+document.getElementById("spd-opts").addEventListener("click",e=>{const b=e.target.closest("[data-lv]");if(!b)return;spLevel=+b.dataset.lv;store.set("spoilerLevel",spLevel);SPK.clear();closeSp();spStrip();show(current)});
+spd.addEventListener("cancel",()=>{if(spLevel===null){spLevel=0;store.set("spoilerLevel",0);spStrip()}});
+function coverStage(key,what){if(ALL()||SPK.has(key))return;const sp=document.querySelector("#view .split");if(!sp)return;sp.classList.add("sp-hidden");sp.dataset.spk=key;
+ sp.insertAdjacentHTML("beforebegin",`<div class="sp-note" data-sp-for="${key}"><span>This ${what} draws relationships from <b>every book</b>, so it may spoil twists you haven't reached.</span><button class="chip" type="button" data-reveal="${key}">Show it anyway</button></div>`)}
+
 /* ============ TABS ============ */
 const TABS=[["dragons","Dragons"],["characters","Characters"],["codex","Codex & Laws"],["signets","Signets"],["family","Family Tree"],["map","Connections Map"]];
 let current=store.get("tab","characters");
@@ -443,7 +569,7 @@ function renderDragons(){
  const v=$("#view");
  v.innerHTML=`<p class="eyebrow">Per Colonel Kaori's Guide to Dragonkind</p><h2>Dragons</h2>
  <p class="lede">Every named dragon across the four books, with colour, tail, rider and bond history. Tap a rider to jump to them.</p>
- <div class="guide">${KIND.map(k=>`<div class="g" style="border-left-color:${k.c==="irid"?"#b88be8":COLORS[k.c]}"><h4>${k.h}</h4>${k.t}</div>`).join("")}</div>
+ <div class="guide">${KIND.map((k,i)=>{const r=later(k.t);return `<div class="g" style="border-left-color:${k.c==="irid"?"#b88be8":COLORS[k.c]}"><h4>${k.h}</h4>${sp(r>0&&hideField(r),"kind-"+i,k.t)}</div>`}).join("")}</div>
  <details style="margin-bottom:22px"><summary style="cursor:pointer;font-weight:500">Tail types</summary><div class="guide" style="margin-top:12px">${TAILS.map(([h,t])=>`<div class="g"><h4>${h}</h4>${t}</div>`).join("")}</div></details>
  <div class="controls"><input type="search" id="dq" placeholder="Filter dragons by name, colour, rider…" value="${esc(dragonQ)}"><span class="count" id="dcount"></span></div>
  <div class="grid" id="dgrid"></div>`;
@@ -451,36 +577,37 @@ function renderDragons(){
  function fill(){const q=dragonQ.toLowerCase();
   const list=DRAGONS.filter(d=>!q||[d.name,d.full,d.color,d.tail,nm(d.rider),d.notes].join(" ").toLowerCase().includes(q));
   $("#dcount").textContent=list.length+" dragons";
-  $("#dgrid").innerHTML=list.length?list.map(d=>`<article class="card" id="d-${d.id}" tabindex="-1">
-   <div class="card-top"><div><h3>${esc(d.name)}</h3>${d.full?`<div class="aka">${esc(d.full)}</div>`:""}</div><div class="pills">${d.dead?`<span class="pill p-dead">Deceased</span>`:""}</div></div>
+  $("#dgrid").innerHTML=list.length?list.map(d=>{const f=firstBook(d.books),k="d-"+d.id,hid=hideItem(f)&&!SPK.has(k),rD=Math.max(f,later(d.dead));return `<article class="card${hid?" sp-hidden":""}" ${hid?`data-spk="${k}"`:""} id="d-${d.id}" tabindex="-1">
+   <div class="card-top"><div><h3>${esc(d.name)}</h3>${d.full?`<div class="aka">${esc(d.full)}</div>`:""}</div><div class="pills">${d.dead?sp(hideField(rD),k+"-dp",`<span class="pill p-dead">Deceased</span>`):""}</div></div>
    <dl class="kv">
-    <dt>Kind</dt><dd>${d.color==="irid"?`<span class="swatch" style="background:${COLORS.irid}"></span>`:sw(d.color)}${esc(d.color[0].toUpperCase()+d.color.slice(1))} · ${esc(d.tail)}</dd>
+    <dt>Kind</dt><dd>${sp(hideField(kindR(d)),k+"-k",`${d.color==="irid"?`<span class="swatch" style="background:${COLORS.irid}"></span>`:sw(d.color)}${esc(d.color[0].toUpperCase()+d.color.slice(1))} · ${esc(d.tail)}`)}</dd>
     <dt>Age</dt><dd>${esc(d.age)}</dd>
-    <dt>Bonded to</dt><dd>${d.rider?charLink(d.rider):"Unbonded / unknown"}</dd>
-    <dt>Previously</dt><dd>${d.prev.length?d.prev.map(p=>`<b>${esc(p.who)}</b> — ${esc(p.fate)}`).join("<br>"):"No earlier rider recorded"}</dd>
-    <dt>Total riders</dt><dd>${esc(d.count)}</dd>
-    ${d.mate?`<dt>Mate</dt><dd>${dragonLink(d.mate)}</dd>`:""}
+    <dt>Bonded to</dt><dd>${sp(hideField(f),k+"-r",d.rider?charLink(d.rider):"Unbonded / unknown")}</dd>
+    <dt>Previously</dt><dd>${sp(hideField(Math.max(f,later(d.prev.map(p=>p.fate).join(" ")))),k+"-p",d.prev.length?d.prev.map(p=>`<b>${esc(p.who)}</b> — ${esc(p.fate)}`).join("<br>"):"No earlier rider recorded")}</dd>
+    <dt>Total riders</dt><dd>${sp(hideField(f),k+"-c",esc(d.count))}</dd>
+    ${d.mate?`<dt>Mate</dt><dd>${sp(hideField(f),k+"-m",dragonLink(d.mate))}</dd>`:""}
    </dl>
-   ${d.notes?`<p class="agenda">${esc(d.notes)}</p>`:""}
-   ${d.dead?`<div class="death">${esc(d.dead)}</div>`:""}
-   <div class="books">${bookTag(d.books)}</div></article>`).join(""):`<p class="empty">No dragons match “${esc(dragonQ)}”.</p>`}
+   ${d.notes?sp(hideField(Math.max(f,later(d.notes))),k+"-n",`<p class="agenda">${esc(d.notes)}</p>`,"div"):""}
+   ${d.dead?sp(hideField(rD),k+"-d",`<div class="death">${esc(d.dead)}</div>`,"div"):""}
+   <div class="books">${bookTag(d.books)}</div></article>`}).join(""):`<p class="empty">No dragons match “${esc(dragonQ)}”.</p>`}
  fill();
 }
 
 /* ============ CHARACTERS ============ */
 const charState=Object.assign({q:"",group:"none",marked:false,align:"all"},store.get("charState",{}));
 function renderChars(){
+ if(!ALL()){charState.align="all";if(charState.group==="align"||charState.group==="status")charState.group="none"}
  const v=$("#view");
  v.innerHTML=`<p class="eyebrow">Basgiath War College roster</p><h2>Characters</h2>
  <p class="lede">Assignments are as of each character's time in the quadrant. <b>Marked ones</b> are children of the Tyrrish rebellion's leaders.</p>
  <div class="controls">
   <input type="search" id="cq" placeholder="Search name, signet, dragon, agenda…" value="${esc(charState.q)}">
   <label for="cg" style="font-size:.9rem;color:var(--muted)">Group by</label>
-  <select id="cg">${[["none","No grouping"],["marked","Marked / unmarked"],["wing","Wing"],["section","Section"],["squad","Squad"],["align","Good / bad"],["status","Alive / dead"]].map(([k,l])=>`<option value="${k}" ${charState.group===k?"selected":""}>${l}</option>`).join("")}</select>
+  <select id="cg">${[["none","No grouping"],["marked","Marked / unmarked"],["wing","Wing"],["section","Section"],["squad","Squad"],["align","Good / bad"],["status","Alive / dead"]].filter(([k])=>ALL()||(k!=="align"&&k!=="status")).map(([k,l])=>`<option value="${k}" ${charState.group===k?"selected":""}>${l}</option>`).join("")}</select>
  </div>
  <div class="controls">
   <button class="chip" id="cm" aria-pressed="${charState.marked}">Marked ones only</button>
-  ${["all","good","grey","bad"].map(a=>`<button class="chip" data-al="${a}" aria-pressed="${charState.align===a}">${{all:"Everyone",good:"Good",grey:"Grey",bad:"Villains"}[a]}</button>`).join("")}
+  ${ALL()?["all","good","grey","bad"].map(a=>`<button class="chip" data-al="${a}" aria-pressed="${charState.align===a}">${{all:"Everyone",good:"Good",grey:"Grey",bad:"Villains"}[a]}</button>`).join(""):""}
   <span class="count" id="ccount"></span>
  </div>
  <div id="cgrid"></div>`;
@@ -489,21 +616,22 @@ function renderChars(){
  $("#cg").addEventListener("change",e=>{charState.group=e.target.value;save();fill()});
  $("#cm").addEventListener("click",e=>{charState.marked=!charState.marked;e.target.setAttribute("aria-pressed",charState.marked);fill()});
  v.querySelectorAll("[data-al]").forEach(b=>b.addEventListener("click",()=>{charState.align=b.dataset.al;v.querySelectorAll("[data-al]").forEach(x=>x.setAttribute("aria-pressed",x===b));fill()}));
- function card(c){return `<article class="card" id="c-${c.id}" tabindex="-1">
-  <div class="card-top"><h3>${esc(c.name)}</h3><div class="pills">${c.marked?`<span class="pill p-mark">Marked</span>`:""}${alignPill(c.align)}${statusPill(c.status)}</div></div>
+ function card(c){const f=firstBook(c.books),k="c-"+c.id,hid=hideItem(f)&&!SPK.has(k),R=t=>hideField(Math.max(f,later(t))),rD=Math.max(f,later(c.death));
+  return `<article class="card${hid?" sp-hidden":""}" ${hid?`data-spk="${k}"`:""} id="c-${c.id}" tabindex="-1">
+  <div class="card-top"><h3>${esc(c.name)}</h3><div class="pills">${c.marked?sp(hideField(f),k+"-mk",`<span class="pill p-mark">Marked</span>`):""}${sp(hideField(f),k+"-al",alignPill(c.align))}${statusPill(c.status)?sp(hideField(rD),k+"-st",statusPill(c.status)):""}</div></div>
   <dl class="kv">
-   <dt>Dragon</dt><dd>${c.dragons.length?c.dragons.map(d=>sw(D[d].color)+dragonLink(d)).join(", "):"None"}</dd>
-   <dt>Assignment</dt><dd>${esc(c.assign)}</dd>
+   <dt>Dragon</dt><dd>${c.dragons.length?c.dragons.map((d,i)=>sp(hideField(Math.max(f,firstBook(D[d]?.books))),k+"-dr"+i,sw(hideField(kindR(D[d]))?"unknown":D[d].color)+dragonLink(d))).join(", "):"None"}</dd>
+   <dt>Assignment</dt><dd>${sp(R(c.assign),k+"-as",esc(c.assign))}</dd>
    <dt>Wing</dt><dd>${esc(c.wing)}</dd>
    <dt>Section</dt><dd>${esc(c.section)}</dd>
    <dt>Squad</dt><dd>${esc(c.squad)}</dd>
    <dt>Threshed</dt><dd>${esc(c.threshed)}</dd>
-   <dt>Signet</dt><dd>${c.signet.length?c.signet.map(s=>esc(s)).join("<br>"):"None / not a rider"}</dd>
+   <dt>Signet</dt><dd>${c.signet.length?c.signet.map((s,i)=>sp(R(s),k+"-sg"+i,esc(s))).join("<br>"):"None / not a rider"}</dd>
    <dt>Age</dt><dd>${esc(c.age)}</dd>
-   <dt>Connections</dt><dd>${esc(c.conn)} <button class="lnk" data-go="map:${c.id}">Map</button></dd>
+   <dt>Connections</dt><dd>${sp(R(c.conn),k+"-cn",esc(c.conn))} <button class="lnk" data-go="map:${c.id}">Map</button></dd>
   </dl>
-  ${c.death?`<div class="death"><b>${c.status==="dead"?"Death":"Fate"}:</b> ${esc(c.death)}</div>`:""}
-  <p class="agenda"><b>Agenda at Basgiath</b>${esc(c.agenda)}</p>
+  ${c.death?sp(hideField(rD),k+"-de",`<div class="death"><b>${c.status==="dead"?"Death":"Fate"}:</b> ${esc(c.death)}</div>`,"div"):""}
+  <p class="agenda"><b>Agenda at Basgiath</b>${sp(R(c.agenda),k+"-ag",esc(c.agenda))}</p>
   <div class="books">${bookTag(c.books)}</div></article>`}
  function fill(){const q=charState.q.toLowerCase();
   let list=CHARS.filter(c=>(!charState.marked||c.marked)&&(charState.align==="all"||c.align===charState.align)&&(!q||[c.name,c.assign,c.wing,c.section,c.squad,c.signet.join(" "),c.dragons.map(nm).join(" "),c.conn,c.agenda,c.death].join(" ").toLowerCase().includes(q)));
@@ -519,7 +647,7 @@ function renderChars(){
 
 /* ============ CODEX ============ */
 function renderCodex(){
- const rule=(r,i,p)=>`<div class="rule" id="${p}-${i}"><span class="art">${esc(r.art)}</span><div><b>${esc(r.t)}</b><p>${esc(r.d)}${r.ref?` <span class="ref">${esc(r.ref.replace(/\bFW\b/g,"Fourth Wing").replace(/\bIF\b/g,"Iron Flame").replace(/\bOS\b/g,"Onyx Storm"))}</span>`:""}</p></div></div>`;
+ const rule=(r,i,p)=>{const rr=Math.max(0,mention([r.ref,r.t,r.d].join(" "))),kk="r-"+p+i,hid=hideItem(rr)&&!SPK.has(kk);return `<div class="rule${hid?" sp-hidden":""}" ${hid?`data-spk="${kk}"`:""} id="${p}-${i}"><span class="art">${esc(r.art)}</span><div><b>${esc(r.t)}</b><p>${esc(r.d)}${r.ref?` <span class="ref">${esc(r.ref.replace(/\bFW\b/g,"Fourth Wing").replace(/\bIF\b/g,"Iron Flame").replace(/\bOS\b/g,"Onyx Storm"))}</span>`:""}</p></div></div>`};
  const groups=Object.keys(CSRC).map(k=>`<h3 class="csub">${CSRC[k]}</h3>`+CODEX.map((r,i)=>r.src===k?rule(r,i,"cx"):"").join("")).join("");
  $("#view").innerHTML=`<p class="eyebrow">Codex of Basgiath · Laws of the Empyrean</p><h2>Codex & Laws</h2>
  <p class="note">Rules are paraphrased. Article and section numbers come from the chapter-opening quotes; "Quadrant traditions" are rules shown in the story without a quoted article.</p>
@@ -538,7 +666,7 @@ function renderSignets(){
  <div class="tbl"><table><thead><tr><th>Signet</th><th>What it does</th><th>Held by</th></tr></thead><tbody id="sbody"></tbody></table></div>`;
  const fill=q=>{q=q.toLowerCase();const l=SIGNETS.map((s,i)=>({...s,i})).filter(s=>!q||[s.sig,s.what,s.who.map(nm).join(" ")].join(" ").toLowerCase().includes(q));
   $("#scount").textContent=l.length+" signets";
-  $("#sbody").innerHTML=l.map(s=>`<tr id="s-${s.i}"><td class="sig">${esc(s.sig)}</td><td>${esc(s.what)}</td><td>${s.who.map(charLink).join(", ")}</td></tr>`).join("")};
+  $("#sbody").innerHTML=l.map(s=>{const r=Math.max(0,later(s.what)),hf=Math.max(r,...s.who.map(w=>firstBook(C[w]?.books))),k="s-"+s.i,hid=hideItem(r)&&!SPK.has(k);return `<tr id="s-${s.i}" class="${hid?"sp-hidden":""}" ${hid?`data-spk="${k}"`:""}><td class="sig">${esc(s.sig)}</td><td>${esc(s.what)}</td><td>${sp(hideField(hf),k+"-w",s.who.map(charLink).join(", "))}</td></tr>`}).join("")};
  $("#sq").addEventListener("input",e=>fill(e.target.value));fill("");
 }
 
@@ -592,6 +720,7 @@ function renderFamily(){
  if(narrow){focus(famFocus&&nodes[famFocus]?famFocus:null)}
  else{focus(famFocus&&nodes[famFocus]?famFocus:"violet");
  requestAnimationFrame(()=>{const n=$(`#fstage .node[data-id="${famFocus}"]`);if(n&&famFocus!=="violet")n.scrollIntoView({block:"center",inline:"center"})})}
+ coverStage("cover-family","family tree");
 }
 
 /* ============ CONNECTIONS MAP ============ */
@@ -643,21 +772,22 @@ function renderMap(){
  $("#mdr").addEventListener("click",()=>{showDragons=!showDragons;store.set("mapDragons",showDragons);renderMap()});
  if(narrow){focus(mapFocus&&P[mapFocus]?mapFocus:null);if(mapFocus&&P[mapFocus])requestAnimationFrame(()=>center(mapFocus))}
  else{const start=mapFocus&&P[mapFocus]?mapFocus:"violet";focus(start);requestAnimationFrame(()=>{const n=$(`#mstage .node[data-id="${start}"]`);n?.scrollIntoView({block:"center",inline:"center"})})}
+ coverStage("cover-map","map");
 }
 
 /* ============ GLOBAL SEARCH ============ */
 const INDEX=[
- ...CHARS.map(c=>({k:"Character",t:c.name,s:[c.signet[0],c.dragons.map(nm).join(" + ")].filter(Boolean).join(" · "),hay:[c.name,c.assign,c.wing,c.section,c.squad,c.signet.join(" "),c.dragons.map(nm).join(" "),c.conn,c.agenda,c.death].join(" "),go:"char:"+c.id})),
- ...DRAGONS.map(d=>({k:"Dragon",t:d.name,s:`${d.color} ${d.tail}${d.rider?" · "+nm(d.rider):""}`,hay:[d.name,d.full,d.color,d.tail,nm(d.rider),d.notes,d.prev.map(p=>p.who).join(" ")].join(" "),go:"dragon:"+d.id})),
- ...SIGNETS.map((s,i)=>({k:"Signet",t:s.sig,s:s.who.map(nm).join(", "),hay:[s.sig,s.what,s.who.map(nm).join(" ")].join(" "),go:"sig:"+i})),
- ...CODEX.map((r,i)=>({k:"Codex",t:r.t,s:r.art,hay:[r.t,r.d,r.art].join(" "),go:"law:cx-"+i})),
+ ...CHARS.map(c=>({f:firstBook(c.books),k:"Character",t:c.name,s:[c.signet[0],c.dragons.map(nm).join(" + ")].filter(Boolean).join(" · "),hay:[c.name,c.assign,c.wing,c.section,c.squad,c.signet.join(" "),c.dragons.map(nm).join(" "),c.conn,c.agenda,c.death].join(" "),go:"char:"+c.id})),
+ ...DRAGONS.map(d=>({f:firstBook(d.books),hf:Math.max(firstBook(d.books),kindR(d)),k:"Dragon",t:d.name,s:`${d.color} ${d.tail}${d.rider?" · "+nm(d.rider):""}`,hay:[d.name,d.full,d.color,d.tail,nm(d.rider),d.notes,d.prev.map(p=>p.who).join(" ")].join(" "),go:"dragon:"+d.id})),
+ ...SIGNETS.map((s,i)=>({f:Math.max(0,later(s.what)),hf:Math.max(0,later(s.what),...s.who.map(w=>firstBook(C[w]?.books))),k:"Signet",t:s.sig,s:s.who.map(nm).join(", "),hay:[s.sig,s.what,s.who.map(nm).join(" ")].join(" "),go:"sig:"+i})),
+ ...CODEX.map((r,i)=>({f:Math.max(0,mention([r.ref,r.t,r.d].join(" "))),k:"Codex",t:r.t,s:r.art,hay:[r.t,r.d,r.art].join(" "),go:"law:cx-"+i})),
  ...DLAWS.map((r,i)=>({k:"Dragon law",t:r.t,s:r.art,hay:[r.t,r.d,r.art].join(" "),go:"law:dl-"+i}))
 ];
 const gq=$("#gq"),gres=$("#gres");let gi=-1;
 function gsearch(){const q=gq.value.trim().toLowerCase();gi=-1;if(q.length<2){gres.hidden=true;return}
  const terms=q.split(/\s+/);
  const hits=INDEX.map(x=>{const h=x.hay.toLowerCase(),t=x.t.toLowerCase();if(!terms.every(w=>h.includes(w)))return null;return{...x,score:(t.startsWith(q)?3:0)+(t.includes(q)?2:0)+(x.k==="Character"?.5:0)}}).filter(Boolean).sort((a,b)=>b.score-a.score).slice(0,14);
- gres.innerHTML=hits.length?hits.map(h=>`<button data-gg="${h.go}"><span class="k">${h.k}</span><span><b>${esc(h.t)}</b><br><span class="s">${esc(h.s)}</span></span></button>`).join(""):`<div style="padding:12px;color:var(--muted)">Nothing found for “${esc(gq.value)}”.</div>`;
+ gres.innerHTML=hits.length?hits.map(h=>{const hid=hideItem(h.f||0),shid=hid||hideField(h.hf??h.f??0)&&h.k!=="Codex"&&h.k!=="Dragon law";return hid?`<button data-gg="${h.go}"><span class="k">Spoiler</span><span><b>Hidden spoiler</b><br><span class="s">From a book you haven't reached</span></span></button>`:`<button data-gg="${h.go}"><span class="k">${h.k}</span><span><b>${esc(h.t)}</b><br><span class="s" style="${shid?"filter:blur(5px)":""}">${esc(h.s)}</span></span></button>`}).join(""):`<div style="padding:12px;color:var(--muted)">Nothing found for “${esc(gq.value)}”.</div>`;
  gres.hidden=false}
 gq.addEventListener("input",gsearch);gq.addEventListener("focus",gsearch);
 gq.addEventListener("keydown",e=>{const bs=[...gres.querySelectorAll("button")];if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();gi=(gi+(e.key==="ArrowDown"?1:-1)+bs.length)%bs.length;bs[gi]?.focus()}else if(e.key==="Enter"&&bs[0]){bs[0].click()}else if(e.key==="Escape"){gres.hidden=true}});
@@ -665,7 +795,16 @@ gres.addEventListener("keydown",e=>{const bs=[...gres.querySelectorAll("button")
 gres.addEventListener("click",e=>{const b=e.target.closest("[data-gg]");if(b){gres.hidden=true;gq.blur();go(b.dataset.gg)}});
 document.addEventListener("click",e=>{if(!e.target.closest(".gsearch"))gres.hidden=true});
 
-renderTabs();show(current);
+/* ============ AFFILIATE SETTINGS ============
+   Once Amazon approves you, paste your tracking ID between the quotes
+   (e.g. "readersatlas-22"). Every "Find it" link updates automatically. */
+const AMAZON_TAG="";
+document.querySelectorAll(".buy[data-buy]").forEach(a=>{
+ a.href="https://www.amazon.com.au/s?k="+encodeURIComponent("Rebecca Yarros "+a.dataset.buy)+(AMAZON_TAG?"&tag="+encodeURIComponent(AMAZON_TAG):"");
+ a.target="_blank";a.rel="noopener"+(AMAZON_TAG?" sponsored":"")});
+
+spStrip();renderTabs();show(current);
+if(spLevel===null)openSp();
 </script>
 
 </body></html>
