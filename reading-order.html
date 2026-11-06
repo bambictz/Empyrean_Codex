@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Empyrean Reading Order Poster</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* One control bar over a scaled preview of the poster canvas. The poster itself is a fixed dark design
+   (it's an image to share); the page chrome follows the viewer's light/dark theme, matching the Empyrean Codex. */
+:root{--bg:#e9ecf1;--surface:#f7f8fb;--fg:#18202d;--muted:#556073;--line:#c6cdd8;--accent:#2c4a86;--accent-ink:#fff;--bronze:#8a5a1c;
+ --display:"IM Fell English SC",Georgia,serif;--body:"Alegreya Sans","Gill Sans",system-ui,sans-serif;--mono:"IBM Plex Mono",Menlo,monospace;color-scheme:light}
+@media (prefers-color-scheme: dark){:root{--bg:#11151c;--surface:#1a2029;--fg:#e3e7ee;--muted:#9aa5b8;--line:#2f3947;--accent:#8eaaf0;--accent-ink:#0e1420;--bronze:#d6a35a;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 var(--body)}
+.wrap{max-width:900px;margin:0 auto;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font-family:var(--display);font-weight:400;font-size:2rem;margin:0;line-height:1.1}
+.eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--bronze);margin:0}
+p.lede{color:var(--muted);margin:6px 0 16px;max-width:65ch}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+.btn{font:inherit;font-weight:500;padding:10px 16px;border-radius:6px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer;min-height:44px}
+.btn[disabled]{opacity:.5;cursor:wait}
+a{color:var(--accent)}
+.status{font-size:.9rem;color:var(--muted);min-height:1.4em;margin:0 0 10px}
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px}
+canvas{display:block;width:100%;height:auto;border-radius:6px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">The Reader's Atlas · Empyrean Codex</p>
+  <h1>Reading Order Poster</h1>
+  <p class="lede">The Empyrean reading order with book covers from Open Library. Wait for the covers to load, then download the PNG to save or share.</p>
+  <div class="controls">
+    <button class="btn" id="dl" disabled>Download PNG</button>
+    <a href="./">← Back to the Empyrean Codex</a>
+  </div>
+  <p class="status" id="status" role="status">Loading covers…</p>
+  <div class="stage"><canvas id="cv" role="img" aria-label="Empyrean reading order poster with book covers"></canvas></div>
+</div>
+<script>
+/* Keep in step with BOOKLIST / UPCOMING in index.html. [title, book no., year, ISBN, spine colour, backup ISBNs] */
+const BOOKS=[
+ ["Fourth Wing","1",2023,"9781649374042","#24385e",[]],
+ ["Iron Flame","2",2023,"9781649374172","#7d2a1f",[]],
+ ["Onyx Storm","3",2025,"9781649374189","#24202f",["9781649377159","9780349437064"]],
+ ["Threshing Day","3.5",2026,"9781682818084","#4f5e3a",["9780349450735","9780349450612"]]
+].map(([t,n,y,isbn,col,alt],i)=>({t,n,y,isbn,col,alt,order:i+1}));
+const COMING=[["Empyrean Book 4","TBA"]];
+const OL=isbn=>`https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg?default=false&poster=1`;
+
+/* Load each cover with CORS so the canvas can be exported. Try each ISBN in turn; null means draw a spine. */
+const loadImg=src=>new Promise(res=>{const i=new Image();i.crossOrigin="anonymous";i.onload=()=>res(i.naturalWidth>10?i:null);i.onerror=()=>res(null);i.src=src});
+const covers={};
+async function loadCovers(){
+ let done=0;const st=document.getElementById("status");
+ await Promise.all(BOOKS.map(async b=>{
+  let img=null;for(const isbn of [b.isbn,...b.alt]){img=await loadImg(OL(isbn));if(img)break}
+  covers[b.isbn]=img;done++;st.textContent=`Loading covers… ${done} of ${BOOKS.length}`;draw();
+ }));
+ const miss=BOOKS.filter(b=>!covers[b.isbn]).map(b=>b.t);
+ st.textContent=miss.length?`Ready. No cover found for ${miss.join(", ")}, so ${miss.length>1?"they're":"it's"} shown as a coloured spine.`:"Ready. All covers loaded.";
+ document.getElementById("dl").disabled=false;
+}
+
+/* ---- drawing (same design as the poster in the Book Guide tab) ---- */
+const cv=document.getElementById("cv"),ctx=cv.getContext("2d");
+function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+function wrap(text,maxW,font){ctx.font=font;const words=text.split(" ");const lines=[];let cur="";for(const w of words){const t=cur?cur+" "+w:w;if(ctx.measureText(t).width>maxW&&cur){lines.push(cur);cur=w}else cur=t}if(cur)lines.push(cur);
+ if(lines.length>2){lines.length=2;let l=lines[1];while(ctx.measureText(l+"…").width>maxW&&l.length)l=l.slice(0,-1);lines[1]=l+"…"}return lines}
+function draw(){
+ const F={disp:'"IM Fell English SC", Georgia, serif',mono:'"IBM Plex Mono", Menlo, monospace',body:'"Alegreya Sans", system-ui, sans-serif'};
+ const items=[...BOOKS.map(b=>({b})),...COMING.map(c=>({c}))];
+ const W=1500,M=70,COLS=Math.min(5,Math.max(3,items.length)),GAP=34,CW=(W-2*M-(COLS-1)*GAP)/COLS,CH=CW*1.5,TXT=110,RGAP=40,HEAD=300,FOOT=130;
+ const rows=Math.ceil(items.length/COLS),H=HEAD+rows*(CH+TXT)+(rows-1)*RGAP+FOOT;
+ cv.width=W;cv.height=H;
+ const bg=ctx.createLinearGradient(0,0,0,H);bg.addColorStop(0,"#1b2433");bg.addColorStop(.5,"#11161f");bg.addColorStop(1,"#0a0d13");ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+ const glow=ctx.createRadialGradient(W/2,H+120,40,W/2,H+120,H*.9);glow.addColorStop(0,"rgba(214,120,40,.28)");glow.addColorStop(1,"rgba(214,120,40,0)");ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
+ let seed=11;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;for(let i=0;i<180;i++){const x=rnd()*W,y=rnd()*H,r=rnd()*1.8+.4;ctx.globalAlpha=.15+rnd()*.5*(y/H);ctx.fillStyle=rnd()>.5?"#f0a24a":"#ffd28a";ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.fill()}ctx.globalAlpha=1;
+ ctx.textAlign="center";ctx.textBaseline="alphabetic";
+ ctx.fillStyle="#9fb0c8";ctx.font=`500 22px ${F.mono}`;ctx.fillText("THE READER'S ATLAS",W/2,86);
+ ctx.fillStyle="#eef1f6";ctx.font=`400 96px ${F.disp}`;ctx.fillText("The Empyrean",W/2,182);
+ ctx.fillStyle="#d6a35a";ctx.font=`italic 400 38px ${F.body}`;ctx.fillText("Reading order",W/2,232);
+ ctx.strokeStyle="rgba(214,163,90,.5)";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W/2-160,262);ctx.lineTo(W/2+160,262);ctx.stroke();
+ items.forEach((it,i)=>{const r=Math.floor(i/COLS),c=i%COLS,inRow=Math.min(COLS,items.length-r*COLS),x=M+(COLS-inRow)*(CW+GAP)/2+c*(CW+GAP),y=HEAD+r*(CH+TXT+RGAP),col="#d6a35a";
+  if(it.b){const b=it.b,img=covers[b.isbn];
+   ctx.save();ctx.shadowColor="rgba(0,0,0,.6)";ctx.shadowBlur=30;ctx.shadowOffsetY=12;rr(x,y,CW,CH,8);ctx.fillStyle="#000";ctx.fill();ctx.restore();
+   if(img){ctx.save();rr(x,y,CW,CH,8);ctx.clip();const k=Math.max(CW/img.naturalWidth,CH/img.naturalHeight),dw=img.naturalWidth*k,dh=img.naturalHeight*k;ctx.drawImage(img,x+(CW-dw)/2,y+(CH-dh)/2,dw,dh);ctx.restore()}
+   else{const g=ctx.createLinearGradient(x,y,x+CW,y);g.addColorStop(0,b.col);g.addColorStop(1,"#0b0e14");rr(x,y,CW,CH,8);ctx.fillStyle=g;ctx.fill();ctx.save();ctx.translate(x+CW/2,y+CH/2);ctx.rotate(-Math.PI/2);ctx.fillStyle="rgba(255,255,255,.92)";const f=`400 34px ${F.disp}`;const L=wrap(b.t,CH-60,f);ctx.font=f;ctx.textBaseline="middle";L.forEach((l,k)=>ctx.fillText(l,0,(k-(L.length-1)/2)*40));ctx.restore();ctx.textBaseline="alphabetic"}
+   rr(x,y,CW,CH,8);ctx.strokeStyle="rgba(255,255,255,.12)";ctx.lineWidth=2;ctx.stroke();
+   ctx.beginPath();ctx.arc(x+8,y+8,30,0,7);ctx.fillStyle=col;ctx.fill();ctx.lineWidth=4;ctx.strokeStyle="#0d1119";ctx.stroke();
+   ctx.fillStyle="#0d1119";ctx.font=`500 24px ${F.mono}`;ctx.textBaseline="middle";ctx.fillText(String(b.order),x+8,y+10);ctx.textBaseline="alphabetic";
+   const L=wrap(b.t,CW,`400 32px ${F.disp}`);ctx.fillStyle="#eef1f6";L.forEach((l,k)=>ctx.fillText(l,x+CW/2,y+CH+40+k*34));
+   ctx.fillStyle=col;ctx.font=`500 16px ${F.mono}`;ctx.fillText(`BOOK ${b.n} · ${b.y}`,x+CW/2,y+CH+40+L.length*34+2);
+  } else {const [t,d]=it.c;
+   rr(x,y,CW,CH,8);ctx.fillStyle="rgba(255,255,255,.04)";ctx.fill();ctx.setLineDash([12,10]);ctx.lineWidth=3;ctx.strokeStyle=col;ctx.stroke();ctx.setLineDash([]);
+   ctx.fillStyle=col;ctx.font=`500 22px ${F.mono}`;ctx.fillText("COMING",x+CW/2,y+CH/2-8);ctx.fillStyle="#c9d2df";ctx.font=`italic 400 36px ${F.body}`;ctx.fillText(d,x+CW/2,y+CH/2+36);
+   const L=wrap(t,CW,`400 32px ${F.disp}`);ctx.fillStyle="#c9d2df";L.forEach((l,k)=>ctx.fillText(l,x+CW/2,y+CH+40+k*34));
+   ctx.fillStyle=col;ctx.font=`500 16px ${F.mono}`;ctx.fillText("NEXT MAIN NOVEL",x+CW/2,y+CH+40+L.length*34+2)}
+ });
+ ctx.fillStyle="#9fb0c8";ctx.font=`500 22px ${F.mono}`;ctx.fillText("READERSATLAS.COM/EMPYREAN_CODEX  ·  @READERS.ATLAS",W/2,H-70);
+ ctx.fillStyle="#6f7d92";ctx.font=`400 18px ${F.body}`;ctx.fillText("Unofficial fan guide. Covers via Open Library. Not affiliated with Rebecca Yarros, Entangled Publishing or Red Tower Books.",W/2,H-38);
+}
+document.getElementById("dl").addEventListener("click",()=>{const st=document.getElementById("status");
+ try{cv.toBlob(bl=>{if(!bl){st.textContent="Couldn't create the PNG. Long-press (or right-click) the poster and save the image instead.";return}
+  const a=document.createElement("a");a.href=URL.createObjectURL(bl);a.download="empyrean-reading-order.png";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);st.textContent="Downloaded."},"image/png")}
+ catch(e){st.textContent="A cover blocked the download. Long-press (or right-click) the poster and save the image instead."}});
+draw();
+(document.fonts?document.fonts.ready:Promise.resolve()).then(()=>{draw();loadCovers()});
+</script>
+</body>
+</html>
