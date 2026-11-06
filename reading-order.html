@@ -42,13 +42,13 @@ canvas{display:block;width:100%;height:auto;border-radius:6px}
   <div class="stage"><canvas id="cv" role="img" aria-label="Empyrean reading order poster with book covers"></canvas></div>
 </div>
 <script>
-/* Keep in step with BOOKLIST / UPCOMING in index.html. [title, book no., year, ISBN, spine colour, backup ISBNs] */
+/* Keep in step with BOOKLIST / UPCOMING in index.html. [title, book no., year, ISBN, spine colour, backup ISBNs, own cover file] */
 const BOOKS=[
  ["Fourth Wing","1",2023,"9781649374042","#24385e",[]],
  ["Iron Flame","2",2023,"9781649374172","#7d2a1f",[]],
- ["Onyx Storm","3",2025,"9781649374189","#24202f",["9781649377159","9780349437064"]],
- ["Threshing Day","3.5",2026,"9781682818084","#4f5e3a",["9780349450735","9780349450612"]]
-].map(([t,n,y,isbn,col,alt],i)=>({t,n,y,isbn,col,alt,order:i+1}));
+ ["Onyx Storm","3",2025,"9781649374189","#24202f",["9781649377159","9780349437064"],"covers/onyx-storm.jpg"],
+ ["Threshing Day","3.5",2026,"9781682818084","#4f5e3a",["9780349450735","9780349450612"],"covers/threshing-day.jpg"]
+].map(([t,n,y,isbn,col,alt,img],i)=>({t,n,y,isbn,col,alt,img,order:i+1}));
 const COMING=[["Empyrean Book 4","TBA"]];
 const OL=isbn=>`https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg?default=false&poster=1`;
 
@@ -58,7 +58,7 @@ const covers={};
 async function loadCovers(){
  let done=0;const st=document.getElementById("status");
  await Promise.all(BOOKS.map(async b=>{
-  let img=null;for(const isbn of [b.isbn,...b.alt]){img=await loadImg(OL(isbn));if(img)break}
+  let img=null;for(const src of [...(b.img?[b.img]:[]),...[b.isbn,...b.alt].map(OL)]){img=await loadImg(src);if(img)break}
   covers[b.isbn]=img;done++;st.textContent=`Loading covers… ${done} of ${BOOKS.length}`;draw();
  }));
  const miss=BOOKS.filter(b=>!covers[b.isbn]).map(b=>b.t);

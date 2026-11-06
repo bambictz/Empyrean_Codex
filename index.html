@@ -566,7 +566,7 @@ const FAMX={niara:{name:"Niara",note:"Grandmother"},durranp:{name:"Durran parent
 
 /* ============ BOOK GUIDE DATA ============
    Reading order = the order of BOOKLIST. c = book code (matches BOOKS above), isbn = cover lookup,
-   alt = backup ISBNs tried if the first cover is missing, col = spine colour if no cover loads,
+   img = your own cover file in the covers/ folder (used first, if set), alt = backup ISBNs tried if a cover is missing, col = spine colour if no cover loads,
    g = spoiler gate for the premise (0 = always shown, 1 = after Fourth Wing, 2 = after Iron Flame).
    To add a connected series later, add it to SERIES and set s on each book: the series filter appears
    automatically once there is more than one series. */
@@ -580,11 +580,11 @@ const BOOKLIST=[
   trope:"Secrets · resistance · learning to trust",
   plot:"Violet survived her first year and learned the truth Navarre has buried for centuries. Now a second-year, she has to keep that secret inside Basgiath while a new vice commandant hunts for traitors, help the rebellion find a way to protect Aretia, and decide whether she can trust the man who lied to her.",
   cast:["violet","xaden","dain","rhiannon","ridoc","sawyer","sloane","aaric","brennan","mira","varrish"]},
- {c:"OS",s:"emp",n:"3",title:"Onyx Storm",abbr:"OS",year:2025,date:"21 Jan 2025",isbn:"9781649374189",alt:["9781649377159","9780349437064"],col:"#24202f",g:2,
+ {c:"OS",s:"emp",n:"3",title:"Onyx Storm",abbr:"OS",year:2025,date:"21 Jan 2025",img:"covers/onyx-storm.jpg",isbn:"9781649374189",alt:["9781649377159","9780349437064"],col:"#24202f",g:2,
   trope:"Quest beyond the map · race against time · war",
   plot:"With the venin pressing in, Violet races to save Xaden before the power he channelled consumes him. Hunted by a venin who wants her lightning, she and her squad leave the Continent in search of allies, and of Andarna's own kind, who might change the war.",
   cast:["violet","xaden","rhiannon","ridoc","sawyer","imogen","garrick","bodhi","aaric","mira","brennan","theophanie","felix"]},
- {c:"TD",s:"emp",n:"3.5",title:"Threshing Day",abbr:"TD",year:2026,date:"29 Sep 2026",isbn:"9781682818084",alt:["9780349450735","9780349450612"],col:"#4f5e3a",g:0,fresh:true,
+ {c:"TD",s:"emp",n:"3.5",title:"Threshing Day",abbr:"TD",year:2026,date:"29 Sep 2026",img:"covers/threshing-day.jpg",isbn:"9781682818084",alt:["9780349450735","9780349450612"],col:"#4f5e3a",g:0,fresh:true,
   trope:"13 rider stories · Threshing · dragon lore",
   plot:"A companion collection of thirteen stories, each following a different rider on their own Threshing Day: the trial where cadets walk into the Vale and try to earn a dragon's bond before something kills them. It doesn't continue the main story. It fills in moments readers have never seen.",
   note:"Not Book 4. Best read after Onyx Storm, because it contains spoilers for the first three books.",
@@ -759,7 +759,8 @@ const OL=(isbn,size)=>`https://covers.openlibrary.org/b/isbn/${isbn}-${size}.jpg
 /* Covers come from Open Library by ISBN. ?default=false makes a missing cover return an error instead of a
    blank image; the card then tries any backup ISBNs, and finally falls back to the coloured spine. */
 const coverHTML=b=>{const spine=`<div class="spine" style="background:${b.col}"><span>${esc(b.abbr)}</span></div>`;
- return b.isbn?`<div class="cover-wrap">${spine}<img class="cover" src="${OL(b.isbn,"M")}"${b.alt?` data-alt="${b.alt.join(",")}"`:""} alt="Cover of ${esc(b.title)}" loading="lazy" decoding="async" width="84" height="126"></div>`:spine};
+ const alts=[...(b.img?[b.isbn]:[]),...(b.alt||[])];
+ return b.isbn||b.img?`<div class="cover-wrap">${spine}<img class="cover" src="${b.img||OL(b.isbn,"M")}"${alts.length?` data-alt="${alts.join(",")}"`:""} alt="Cover of ${esc(b.title)}" loading="lazy" decoding="async" width="84" height="126"></div>`:spine};
 const noCover=img=>{const alt=(img.dataset.alt||"").split(",").filter(Boolean);if(alt.length){img.dataset.alt=alt.slice(1).join(",");img.src=OL(alt[0],"M");return}img.closest(".cover-wrap")?.classList.add("nocover")};
 document.addEventListener("error",e=>{if(e.target.classList?.contains("cover"))noCover(e.target)},true);
 document.addEventListener("load",e=>{const t=e.target;if(t.classList?.contains("cover")&&t.naturalWidth<10)noCover(t)},true);
@@ -768,7 +769,7 @@ document.addEventListener("load",e=>{const t=e.target;if(t.classList?.contains("
    Covers load with CORS so the PNG can be downloaded; a cover that won't load is drawn as a coloured spine. */
 const PIMG={};
 function posterImg(b){if(b.c in PIMG)return PIMG[b.c];
- const srcs=[b.isbn,...(b.alt||[])].map(i=>OL(i,"L")+"&poster=1");
+ const srcs=[...(b.img?[b.img]:[]),...[b.isbn,...(b.alt||[])].map(i=>OL(i,"L")+"&poster=1")];
  PIMG[b.c]=new Promise(res=>{const tryLoad=k=>{if(k>=srcs.length)return res(null);const i=new Image();i.crossOrigin="anonymous";i.onload=()=>i.naturalWidth>10?res(i):tryLoad(k+1);i.onerror=()=>tryLoad(k+1);i.src=srcs[k]};tryLoad(0)});
  return PIMG[b.c]}
 function drawPoster(cv,sel,imgs){
